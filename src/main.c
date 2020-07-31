@@ -27,6 +27,11 @@ static struct argp_option options[] = {
 };
 // clang-format on
 
+struct arguments {
+    struct sunclock_margins margins;
+    enum sunclock_layer layer;
+};
+
 static error_t parse_option(int key, char* arg, struct argp_state* state) {
     struct arguments* arguments = state->input;
     switch (key) {
@@ -47,14 +52,13 @@ static error_t parse_option(int key, char* arg, struct argp_state* state) {
     return 0;
 }
 
-static struct argp argp = {options, parse_option, NULL, doc};
-struct arguments {
-    struct sunclock_margins margins;
-    enum sunclock_layer layer;
-};
-
 int main(int argc, char* argv[]) {
-    struct arguments arguments = {0};
+    struct argp argp = {options, parse_option, NULL, doc};
+    struct arguments arguments = {
+        // default args
+        .layer = SUNCLOCK_LAYER_BOTTOM,
+        .margins = {},
+    };
     argp_parse(&argp, argc, argv, 0, 0, &arguments);
 
     struct sunclock_gui_settings settings = {

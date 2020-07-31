@@ -13,9 +13,9 @@ gtk_layer_shell = dependency('gtk-layer-shell-0')
 executable(
     meson.project_name(),
     files(
-    	'main.c',
-    	'gui.c',
-    	'astro.c',
+    	'src/main.c',
+    	'src/gui.c',
+    	'src/astro.c',
     ),
     include_directories: ['include'],
     dependencies: [
