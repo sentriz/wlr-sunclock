@@ -14,6 +14,7 @@ executable(
     meson.project_name(),
     files(
     	'main.c',
+    	'gui.c',
     	'astro.c',
     ),
     include_directories: ['include'],
