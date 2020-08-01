@@ -17,7 +17,7 @@ static enum sunclock_layer layer_from_str(char* in) {
 }
 
 // clang-format off
-static char doc[] = "A program which accepts an input and output file as arguments";
+static char doc[] = "Displays a sunclock desktop widget using the layer shell protocol";
 static struct argp_option options[] = {
     {"layer",         'y', "<background|bottom|top|overlay>", 0, "desktop layer to show the widget on", 1},
 
@@ -57,7 +57,7 @@ int main(int argc, char* argv[]) {
     struct argp argp = {options, parse_option, NULL, doc};
     struct sunclock_gui_settings settings = {
         // TODO: not do this path thing
-        .image_path = "/usr/local/share/wlr-sunclock/maps/800.jpg",
+        .image_path = "/usr/share/wlr-sunclock/maps/800.jpg",
         .title = "xyz.senan.wlr-sunclock",
         .layer = SUNCLOCK_LAYER_BOTTOM,
     };
