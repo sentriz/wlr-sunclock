@@ -5,6 +5,17 @@ project(
     meson_version: '>=0.47.0',
 )
 
+install_data(
+    files(
+        'assets/maps/1200.jpg',
+        'assets/maps/1600.jpg',
+        'assets/maps/200.jpg',
+        'assets/maps/400.jpg',
+        'assets/maps/800.jpg',
+    ),
+    install_dir: join_paths(get_option('datadir'), 'wlr-sunclock', 'maps'),
+)
+
 cc = meson.get_compiler('c')
 math = cc.find_library('m')
 gtk = dependency('gtk+-wayland-3.0', version: '>=3.22.0')

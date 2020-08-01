@@ -62,9 +62,9 @@ int main(int argc, char* argv[]) {
     argp_parse(&argp, argc, argv, 0, 0, &arguments);
 
     struct sunclock_gui_settings settings = {
+        // TODO: not do this path thing
+        .image_path = "/usr/local/share/wlr-sunclock/maps/800.jpg",
         .title = "xyz.senan.wlr-sunclock",
-        .image_path = "/home/senan/projects/kdetoys_3.5.10.orig/kdetoys-3.5.10/"
-                      "kworldwatch/maps/flatworld/800.jpg",
         .margins = arguments.margins,
         .layer = arguments.layer,
     };
