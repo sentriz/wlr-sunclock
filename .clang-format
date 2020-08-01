@@ -1,4 +1,4 @@
 AllowShortCaseLabelsOnASingleLine: true
 PointerAlignment: Left
-ColumnLimit: 85
+ColumnLimit: 89
 IndentWidth: 4
