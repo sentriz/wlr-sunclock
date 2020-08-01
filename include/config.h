@@ -1,10 +1,6 @@
 #ifndef SUNCLOCK_CONFIG_H
 #define SUNCLOCK_CONFIG_H
 
-struct sunclock_margins {
-    int top, right, bottom, left;
-};
-
 enum sunclock_layer {
     SUNCLOCK_LAYER_BACKGROUND,
     SUNCLOCK_LAYER_BOTTOM,
@@ -13,7 +9,13 @@ enum sunclock_layer {
 };
 
 struct sunclock_gui_settings {
-    struct sunclock_margins margins;
+    struct {
+        int top, right, bottom, left;
+    } margins;
+    struct {
+        int width;
+        char* colour;
+    } border;
     enum sunclock_layer layer;
     char* image_path;
     char* title;

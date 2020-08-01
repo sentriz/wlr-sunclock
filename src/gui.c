@@ -112,7 +112,8 @@ void sunclock_gui_activate(GtkApplication* app, gpointer psettings) {
                            image);
     g_timeout_add_seconds(30, G_SOURCE_FUNC(sunclock_gui_draw_shade_timeout), image);
 
-    gtk_container_set_border_width(GTK_CONTAINER(gtk_window), 12);
+    gtk_container_set_border_width(GTK_CONTAINER(gtk_window),
+                                   settings->border.width);
     gtk_container_add(GTK_CONTAINER(gtk_window), overlay);
     gtk_widget_show_all(GTK_WIDGET(gtk_window));
 }

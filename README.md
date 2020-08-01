@@ -5,4 +5,7 @@
     meson build
     sudo ninja -C build install
 
-todo: add licences
+todo:
+  - add licences
+  - configurable border colour
+  - transparency
