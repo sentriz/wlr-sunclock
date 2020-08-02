@@ -1,6 +1,7 @@
 #include "astro.h"
 #include "config.h"
 #include "gtk-layer-shell.h"
+#include "map.h"
 #include <gtk/gtk.h>
 
 static void sunclock_gui_fill_wtab(short* wtab, int width, int height,
@@ -29,7 +30,7 @@ static void sunclock_gui_draw_line(cairo_t* cr, short x1, short y1, short x2,
 static gboolean sunclock_gui_draw_shade_timeout(GtkWidget* widget) {
     gtk_widget_queue_draw(widget);
     return TRUE;
-};
+}
 
 static gboolean sunclock_gui_draw_shade(GtkWidget* widget, cairo_t* cr,
                                         gpointer image) {
@@ -105,12 +106,13 @@ void sunclock_gui_activate(GtkApplication* app, gpointer psettings) {
 
     int image_width = settings->width;
     int image_height = settings->width / 2;
-    GdkPixbuf* image = gdk_pixbuf_new_from_file(settings->image_path, NULL);
+    GdkPixbuf* map_image =
+        gdk_pixbuf_new_from_inline(-1, sunclock_map, FALSE, NULL);
     gtk_widget_set_size_request(canvas, image_width, image_height);
 
     // draw canvas now and every 30s
     g_signal_connect(canvas, "draw", G_CALLBACK(sunclock_gui_draw_shade),
-                     image);
+                     map_image);
     g_timeout_add_seconds(30, G_SOURCE_FUNC(sunclock_gui_draw_shade_timeout),
                           canvas);
 

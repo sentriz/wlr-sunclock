@@ -17,7 +17,6 @@ struct sunclock_gui_settings {
     enum sunclock_layer layer;
     int width;
     char* anchors;
-    char* image_path;
     char* title;
 };
 

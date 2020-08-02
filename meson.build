@@ -4,26 +4,19 @@ project(
     version: '0.0.0',
     meson_version: '>=0.47.0',
     default_options: [
-        'c_std=c99',
         'warning_level=3',
         'werror=true',
     ],
 )
 
-install_data(
-    files(
-        'assets/maps/1200.jpg',
-        'assets/maps/1600.jpg',
-        'assets/maps/200.jpg',
-        'assets/maps/400.jpg',
-        'assets/maps/800.jpg',
-    ),
-    install_dir: join_paths(get_option('datadir'), 'wlr-sunclock', 'maps'),
-)
-
 cc = meson.get_compiler('c')
 gtk = dependency('gtk+-wayland-3.0', version: '>=3.22.0')
 gtk_layer_shell = dependency('gtk-layer-shell-0')
+
+add_project_arguments(cc.get_supported_arguments([
+    '-Wno-deprecated-declarations',
+    '-Wno-overlength-strings',
+]), language: 'c')
 
 executable(
     meson.project_name(),

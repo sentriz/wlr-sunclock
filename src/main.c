@@ -34,7 +34,7 @@ static error_t parse_option(int key, char* arg, struct argp_state* state) {
     switch (key) {
     case 'l':
         settings->layer = layer_from_str(arg);
-        if (settings->layer == -1) {
+        if ((int)settings->layer == -1) {
             fprintf(stderr, "invalid layer %s provided\n", arg);
             argp_usage(state);
         };
@@ -54,19 +54,14 @@ static error_t parse_option(int key, char* arg, struct argp_state* state) {
 }
 
 int main(int argc, char* argv[]) {
-    struct argp argp = {options, parse_option, NULL, doc};
+    struct argp argp = {options, parse_option, NULL, doc, NULL, NULL, NULL};
     struct sunclock_gui_settings settings = {
         // TODO: not do this path thing
-        .image_path = "/usr/share/wlr-sunclock/maps/1200.jpg",
         .title = "xyz.senan.wlr-sunclock",
         .layer = SUNCLOCK_LAYER_BOTTOM,
         .width = 300,
         .anchors = "",
     };
     argp_parse(&argp, argc, argv, 0, 0, &settings);
-    if (access(settings.image_path, F_OK) == -1) {
-        fprintf(stderr, "couldn't locate image `%s`\n", settings.image_path);
-        return 1;
-    }
     return sunclock_gui_start(&settings);
 }
