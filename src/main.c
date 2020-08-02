@@ -25,7 +25,7 @@ static struct argp_option options[] = {
     {"margins",       'm', "MARGINS",                         0, "window margins",                      1},
     {"border-width",  'd', "BORDER_WIDTH",                    0, "window border width",                 2},
     {"border-colour", 'c', "BORDER_COLOUR",                   0, "window border colour (unused)",       2},
-	{0},
+    {0},
 };
 // clang-format on
 
@@ -56,7 +56,6 @@ static error_t parse_option(int key, char* arg, struct argp_state* state) {
 int main(int argc, char* argv[]) {
     struct argp argp = {options, parse_option, NULL, doc, NULL, NULL, NULL};
     struct sunclock_gui_settings settings = {
-        // TODO: not do this path thing
         .title = "xyz.senan.wlr-sunclock",
         .layer = SUNCLOCK_LAYER_BOTTOM,
         .width = 300,

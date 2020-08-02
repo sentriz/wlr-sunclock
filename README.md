@@ -1,15 +1,18 @@
+![](.github/gif.gif)
+(demo gif, in reality it updates in real time)
+
 # wlr-sunclock
 
-    pacman -S gtk-layer-shell gtk3 wayland
+wayland desktop widget to show to the sun's shadows on earth.  
+uses the [layer shell protocol](https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-layer-shell-unstable-v1.xml) to render on your desktop, behind your windows
+
 
 ## install from source
 
+    pacman -S gtk-layer-shell gtk3 wayland
+
     meson build
     sudo ninja -C build install
-
-## install from aur
-
-see [wlr-sunclock-git](https://aur.archlinux.org/packages/wlr-sunclock-git/)
 
 ## cli args
 
@@ -32,3 +35,14 @@ see [wlr-sunclock-git](https://aur.archlinux.org/packages/wlr-sunclock-git/)
     ├─┘   │ │   └─┤ │     │ │     │ │ ┌─┐ │ ║     ║
     │     │ │     │ │   ┌─┤ ├─┐   │ │ └─┘ │ ║     ║
     └─────┘ └─────┘ └───┴─┘ └─┴───┘ └─────┘ ╚═════╝
+
+## start on boot with sway example
+
+    # ~/.config/sway/config
+
+    exec wlr-sunclock \
+       --margins "0,16,0,16" \
+       --width 800 \
+       --layer bottom \
+       --anchors br \
+       --border-width 2
