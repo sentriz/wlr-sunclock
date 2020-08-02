@@ -30,8 +30,8 @@ double astro_gm_time_to_julian(struct tm* t) {
     /* compute century */
     double c = y / 100L;
     y -= 100L * c;
-    return t->tm_mday + (c * 146097L) / 4 + (y * 1461L) / 4 + (m * 153L + 2) / 5 +
-           1721119L;
+    return t->tm_mday + (c * 146097L) / 4 + (y * 1461L) / 4 +
+           (m * 153L + 2) / 5 + 1721119L;
 }
 
 /* convert internal GMT  date  and     time  to  astronomical
@@ -62,8 +62,8 @@ double astro_kepler(double m, double ecc) {
     units  is returned in RV and the Sun's longitude (true
     or apparent, as desired) is  returned  as  degrees  in
     SLONG */
-void astro_sun_position(double jd, int apparent, double* ra, double* dec, double* rv,
-                        double* slong) {
+void astro_sun_position(double jd, int apparent, double* ra, double* dec,
+                        double* rv, double* slong) {
     /* time in Julian centuries of 36525 ephemeris days,
        measured from the epoch 1900 January 0.5 ET */
     double t = (jd - 2415020.0) / 36525.0;
@@ -105,7 +105,8 @@ void astro_sun_position(double jd, int apparent, double* ra, double* dec, double
     *rv = (1.0000002 * (1 - e * e)) / (1 + e * cos(dtr(v)));
 
     /* determine solar co-ordinates */
-    *ra = fixangle(rtd(atan2(cos(dtr(eps)) * sin(dtr(theta)), cos(dtr(theta)))));
+    *ra =
+        fixangle(rtd(atan2(cos(dtr(eps)) * sin(dtr(theta)), cos(dtr(theta)))));
     *dec = rtd(asin(sin(dtr(eps)) * sin(dtr(theta))));
 }
 
@@ -173,7 +174,8 @@ void astro_project_illum(short* wtab, int xdots, int ydots, double dec) {
         lilat = ilat;
     }
 
-    /* now tweak the widths to generate full illumination for the correct pole */
+    /* now tweak the widths to generate full illumination for the correct pole
+     */
     if (dec < 0.0) {
         ilat = ydots - 1;
         lilat = -1;

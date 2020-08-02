@@ -14,11 +14,13 @@ static void sunclock_gui_fill_wtab(short* wtab, int width, int height,
     astro_project_illum(wtab, width, height, sundec);
 
     // note: greenwich is in the middle
-    int sec = gm_time->tm_hour * 60 * 60 + gm_time->tm_min * 60 + gm_time->tm_sec;
+    int sec =
+        gm_time->tm_hour * 60 * 60 + gm_time->tm_min * 60 + gm_time->tm_sec;
     *gmt_position = width * sec / 86400;
 }
 
-static void sunclock_gui_draw_line(cairo_t* cr, short x1, short y1, short x2, short y2) {
+static void sunclock_gui_draw_line(cairo_t* cr, short x1, short y1, short x2,
+                                   short y2) {
     cairo_move_to(cr, x1, y1);
     cairo_line_to(cr, x2, y2);
     cairo_stroke(cr);
@@ -29,12 +31,13 @@ static gboolean sunclock_gui_draw_shade_timeout(GtkWidget* widget) {
     return TRUE;
 };
 
-static gboolean sunclock_gui_draw_shade(GtkWidget* widget, cairo_t* cr, gpointer image) {
+static gboolean sunclock_gui_draw_shade(GtkWidget* widget, cairo_t* cr,
+                                        gpointer image) {
     int height = gtk_widget_get_allocated_height(widget);
     int width = gtk_widget_get_allocated_width(widget);
 
-    GdkPixbuf* image_scaled =
-        gdk_pixbuf_scale_simple((GdkPixbuf*)image, width, height, GDK_INTERP_BILINEAR);
+    GdkPixbuf* image_scaled = gdk_pixbuf_scale_simple(
+        (GdkPixbuf*)image, width, height, GDK_INTERP_BILINEAR);
     gdk_cairo_set_source_pixbuf(cr, image_scaled, 0, 0);
     cairo_paint(cr);
     g_object_unref(image_scaled);
@@ -79,7 +82,8 @@ void sunclock_gui_activate(GtkApplication* app, gpointer psettings) {
     struct sunclock_gui_settings* settings = psettings;
 
     // user setting border, layer
-    gtk_container_set_border_width(GTK_CONTAINER(gtk_window), settings->border.width);
+    gtk_container_set_border_width(GTK_CONTAINER(gtk_window),
+                                   settings->border.width);
     gtk_layer_set_layer(gtk_window, (int)settings->layer);
 
     // user setting margin
@@ -105,8 +109,10 @@ void sunclock_gui_activate(GtkApplication* app, gpointer psettings) {
     gtk_widget_set_size_request(canvas, image_width, image_height);
 
     // draw canvas now and every 30s
-    g_signal_connect(canvas, "draw", G_CALLBACK(sunclock_gui_draw_shade), image);
-    g_timeout_add_seconds(30, G_SOURCE_FUNC(sunclock_gui_draw_shade_timeout), canvas);
+    g_signal_connect(canvas, "draw", G_CALLBACK(sunclock_gui_draw_shade),
+                     image);
+    g_timeout_add_seconds(30, G_SOURCE_FUNC(sunclock_gui_draw_shade_timeout),
+                          canvas);
 
     gtk_container_add(GTK_CONTAINER(gtk_window), canvas);
     gtk_widget_show_all(GTK_WIDGET(gtk_window));
@@ -114,7 +120,8 @@ void sunclock_gui_activate(GtkApplication* app, gpointer psettings) {
 
 int sunclock_gui_start(struct sunclock_gui_settings* settings) {
     GtkApplication* app = gtk_application_new(settings->title, 0);
-    g_signal_connect(app, "activate", G_CALLBACK(sunclock_gui_activate), settings);
+    g_signal_connect(app, "activate", G_CALLBACK(sunclock_gui_activate),
+                     settings);
 
     int status = g_application_run(G_APPLICATION(app), 0, 0);
     g_object_unref(app);

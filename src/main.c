@@ -20,11 +20,12 @@ static enum sunclock_layer layer_from_str(char* in) {
 static char doc[] = "Displays a sunclock desktop widget using the layer shell protocol";
 static struct argp_option options[] = {
     {"layer",         'l', "<background|bottom|top|overlay>", 0, "desktop layer to show the widget on", 1},
-    {"width",         'w', "[WIDTH]",                         0, "window width",                        1},
-    {"anchors",       'a', "[ANCHORS]",                       0, "window anchors",                      1},
-    {"margins",       'm', "[MARGINS]",                       0, "window margins",                      1},
-    {"border-width",  'd', "[BORDER_WIDTH]",                  0, "window border width",                 2},
-    {"border-colour", 'c', "[BORDER_COLOUR]",                 0, "window border colour (unused)",       2},
+    {"width",         'w', "WIDTH",                           0, "window width",                        1},
+    {"anchors",       'a', "ANCHORS",                         0, "window anchors",                      1},
+    {"margins",       'm', "MARGINS",                         0, "window margins",                      1},
+    {"border-width",  'd', "BORDER_WIDTH",                    0, "window border width",                 2},
+    {"border-colour", 'c', "BORDER_COLOUR",                   0, "window border colour (unused)",       2},
+	{0},
 };
 // clang-format on
 
