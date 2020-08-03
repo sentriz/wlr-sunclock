@@ -19,12 +19,13 @@ static enum sunclock_layer layer_from_str(char* in) {
 // clang-format off
 static char doc[] = "Displays a sunclock desktop widget using the layer shell protocol";
 static struct argp_option options[] = {
-    {"layer",         'l', "<background|bottom|top|overlay>", 0, "desktop layer to show the widget on", 1},
-    {"width",         'w', "WIDTH",                           0, "window width",                        1},
-    {"anchors",       'a', "ANCHORS",                         0, "window anchors",                      1},
-    {"margins",       'm', "MARGINS",                         0, "window margins",                      1},
-    {"border-width",  'd', "BORDER_WIDTH",                    0, "window border width",                 2},
-    {"border-colour", 'c', "BORDER_COLOUR",                   0, "window border colour (unused)",       2},
+    {"layer",         'l', "<background|bottom|top|overlay>", 0, "desktop layer to show the widget on",               1},
+    {"width",         'w', "WIDTH",                           0, "width of the window",                               1},
+    {"anchors",       'a', "ANCHORS",                         0, "string of window anchors (see readme)",             1},
+    {"margins",       'm', "MARGINS",                         0, "comma seperated margins for window",                1},
+    {"monitor-index", 'i', "MONITOR_INDEX",                   0, "monitor to show window on (starts at 0)",           1},
+    {"border-width",  'd', "BORDER_WIDTH",                    0, "width of the window's border",                      2},
+    {"border-colour", 'c', "BORDER_COLOUR",                   0, "colour of the window's border (to be implemented)", 2},
     {0},
 };
 // clang-format on
@@ -45,6 +46,7 @@ static error_t parse_option(int key, char* arg, struct argp_state* state) {
         for (int i = 0; i < 4; i++)
             settings->margins[i] = atoi(strsep(&arg, ","));
         break;
+    case 'i': settings->monitor_index = atoi(arg); break;
     case 'd': settings->border.width = atoi(arg); break;
     case 'c': settings->border.colour = arg; break;
     case ARGP_KEY_ARG: break;
@@ -60,6 +62,7 @@ int main(int argc, char* argv[]) {
         .layer = SUNCLOCK_LAYER_BOTTOM,
         .width = 300,
         .anchors = "",
+        .monitor_index = 0,
     };
     argp_parse(&argp, argc, argv, 0, 0, &settings);
     return sunclock_gui_start(&settings);

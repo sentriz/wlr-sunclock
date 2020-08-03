@@ -18,6 +18,7 @@ struct sunclock_gui_settings {
     int width;
     char* anchors;
     char* title;
+    int monitor_index;
 };
 
 #endif

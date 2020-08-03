@@ -100,6 +100,12 @@ void sunclock_gui_activate(GtkApplication* app, gpointer psettings) {
         case 'b': gtk_layer_set_anchor(gtk_window, 3, TRUE); break;
         }
 
+    // user setting monitor index
+    GdkDisplay* display = gdk_display_get_default();
+    GdkMonitor* monitor =
+        gdk_display_get_monitor(display, settings->monitor_index);
+    gtk_layer_set_monitor(gtk_window, monitor);
+
     GtkWidget* canvas = gtk_drawing_area_new();
     gtk_widget_set_hexpand(canvas, TRUE);
     gtk_widget_set_vexpand(canvas, TRUE);
