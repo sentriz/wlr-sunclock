@@ -4,8 +4,7 @@
 # wlr-sunclock
 
 wayland desktop widget to show to the sun's shadows on earth.  
-uses the [layer shell protocol](https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-layer-shell-unstable-v1.xml) to render on your desktop, behind your windows
-
+uses [gtk-layer-shell](https://github.com/wmww/gtk-layer-shell) and the [layer shell protocol](https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-layer-shell-unstable-v1.xml) to render on your desktop, behind your windows
 
 ## install from source
 
@@ -13,6 +12,10 @@ uses the [layer shell protocol](https://github.com/swaywm/wlr-protocols/blob/mas
 
     meson build
     sudo ninja -C build install
+
+## install from AUR
+
+please see [wlr-sunclock-git](https://aur.archlinux.org/packages/wlr-sunclock-git/)
 
 ## cli args
 
