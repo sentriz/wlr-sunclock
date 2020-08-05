@@ -1,3 +1,10 @@
+/***************************************************************
+ * "Sun clock"                                                 *
+ *                                                             *
+ * Designed and implemented by John Walker in November of 1988 *
+ * Version for the Sun Workstation                             *
+ ***************************************************************/
+
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,8 +23,7 @@
 #define TERMINC 100       /* circle segments for terminator */
 #define PROJINT (60 * 10) /* frequency of seasonal recalculation */
 
-/* convert internal GMT date and time to Julian day
-   and fraction */
+/* convert internal GMT date and time to Julian day and fraction */
 double astro_gm_time_to_julian(struct tm* t) {
     double y = t->tm_year + 1900;
     double m = t->tm_mon + 1;
@@ -34,9 +40,8 @@ double astro_gm_time_to_julian(struct tm* t) {
            (m * 153L + 2) / 5 + 1721119L;
 }
 
-/* convert internal GMT  date  and     time  to  astronomical
-   Julian  time  (i.e.   Julian  date  plus  day fraction,
-   expressed as a double) */
+/* convert internal GMT date and time to astronomical Julian time (i.e. Julian
+ * date plus day fraction, expressed as a double) */
 long astro_gm_time_to_julian_astro(struct tm* t) {
     return (astro_gm_time_to_julian(t) - 0.5) +
            (((long)t->tm_sec) + 60L * (t->tm_min + 60L * t->tm_hour)) / 86400.0;
@@ -52,26 +57,23 @@ double astro_kepler(double m, double ecc) {
     return e;
 }
 
-/*  calculate position of the Sun.	JD is the Julian  date
-    of  the  instant for which the position is desired and
-    APPARENT should be nonzero if  the  apparent  position
-    (corrected  for  nutation  and aberration) is desired.
-    The Sun's co-ordinates are returned  in  RA  and  DEC,
-    both  specified  in degrees (divide RA by 15 to obtain
-    hours).  The radius vector to the Sun in  astronomical
-    units  is returned in RV and the Sun's longitude (true
-    or apparent, as desired) is  returned  as  degrees  in
-    SLONG */
+/* calculate position of the Sun. JD is the Julian date of the instant for which
+ the position is desired and APPARENT should be nonzero if the apparent position
+ (corrected for nutation and aberration) is desired. The Sun's co-ordinates are
+ returned in RA and DEC, both specified in degrees (divide RA by 15 to obtain
+ hours). The radius vector to the Sun in astronomical units is returned in RV
+ and the Sun's longitude (true or apparent, as desired) is returned as degrees
+ in SLONG */
 void astro_sun_position(double jd, int apparent, double* ra, double* dec,
                         double* rv, double* slong) {
-    /* time in Julian centuries of 36525 ephemeris days,
-       measured from the epoch 1900 January 0.5 ET */
+    /* time in Julian centuries of 36525 ephemeris days, measured from the epoch
+     * 1900 January 0.5 ET */
     double t = (jd - 2415020.0) / 36525.0;
     double t2 = t * t;
     double t3 = t2 * t;
 
-    /* geometric mean longitude of the Sun, referred to the
-       mean equinox of the date */
+    /* geometric mean longitude of the Sun, referred to the mean equinox of the
+     * date */
     double l = fixangle(279.69668 + 36000.76892 * t + 0.0003025 * t2);
 
     /* sun's mean anomaly */
@@ -90,7 +92,7 @@ void astro_sun_position(double jd, int apparent, double* ra, double* dec,
     /* sun's true longitude */
     double theta = l + v - m;
 
-    /* obliquity of the ecliptic. */
+    /* obliquity of the ecliptic */
     double eps = 23.452294 - 0.0130125 * t - 0.00000164 * t2 + 0.000000503 * t3;
 
     /* corrections for Sun's apparent longitude, if desired */
@@ -110,11 +112,11 @@ void astro_sun_position(double jd, int apparent, double* ra, double* dec,
     *dec = rtd(asin(sin(dtr(eps)) * sin(dtr(theta))));
 }
 
-/* greenwich Mean Siderial Time for a given
-   instant expressed as a Julian date and fraction */
+/* greenwich Mean Siderial Time for a given instant expressed as a Julian date
+ * and fraction */
 double astro_gm_siderial_time(double jd) {
-    /* time, in Julian centuries of 36525 ephemeris days,
-       measured from the epoch 1900 January 0.5 ET */
+    /* time, in Julian centuries of 36525 ephemeris days, measured from the
+     * epoch 1900 January 0.5 ET */
     double t = ((floor(jd + 0.5) - 0.5) - 2415020.0) / 36525.0;
     double theta0 = 6.6460656 + 2400.051262 * t + 0.00002581 * t * t;
 
@@ -144,8 +146,8 @@ void astro_project_illum(short* wtab, int xdots, int ydots, double dec) {
         y = cos(th);
         z = c * sin(th);
 
-        /* transform the resulting co-ordinate through the
-           map projection to obtain screen co-ordinates */
+        /* transform the resulting co-ordinate through the map projection to
+         * obtain screen co-ordinates */
         lon = (y == 0 && x == 0) ? 0.0 : rtd(atan2(y, x));
         lat = rtd(asin(z));
 
@@ -153,7 +155,7 @@ void astro_project_illum(short* wtab, int xdots, int ydots, double dec) {
         ilon = lon * (xdots / 360.0);
 
         if (ftf) {
-            /* first time.  just save start co-ordinate */
+            /* first time. just save start co-ordinate */
             lilon = ilon;
             lilat = ilat;
             ftf = 0;
@@ -174,8 +176,7 @@ void astro_project_illum(short* wtab, int xdots, int ydots, double dec) {
         lilat = ilat;
     }
 
-    /* now tweak the widths to generate full illumination for the correct pole
-     */
+    /* tweak the widths to generate full illumination for the correct pole */
     if (dec < 0.0) {
         ilat = ydots - 1;
         lilat = -1;

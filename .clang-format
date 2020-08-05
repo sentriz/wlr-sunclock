@@ -1,3 +1,4 @@
 AllowShortCaseLabelsOnASingleLine: true
 PointerAlignment: Left
 IndentWidth: 4
+ReflowComments: true
