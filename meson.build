@@ -1,12 +1,8 @@
 project(
-    'wlr-sunclock',
-    'c',
-    version: '0.0.0',
-    meson_version: '>=0.47.0',
-    default_options: [
-        'warning_level=3',
-        'werror=true',
-    ],
+  'wlr-sunclock',
+  'c',
+meson_version : '>=0.47.0',
+default_options : ['warning_level=3', 'werror=true'],
 )
 
 cc = meson.get_compiler('c')

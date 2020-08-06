@@ -1,5 +1,6 @@
 #include "config.h"
 #include "gui.h"
+#include "version.h"
 #include <argp.h>
 #include <stdlib.h>
 #include <string.h>
@@ -26,6 +27,7 @@ static struct argp_option options[] = {
     {"monitor-index", 'i', "MONITOR_INDEX",                   0, "monitor to show window on (starts at 0)",           1},
     {"border-width",  'd', "BORDER_WIDTH",                    0, "width of the window's border",                      2},
     {"border-colour", 'c', "BORDER_COLOUR",                   0, "colour of the window's border (to be implemented)", 2},
+    {"version",       'v', NULL,                              0, "print version",                                     3},
     {0},
 };
 // clang-format on
@@ -49,6 +51,10 @@ static error_t parse_option(int key, char* arg, struct argp_state* state) {
     case 'i': settings->monitor_index = atoi(arg); break;
     case 'd': settings->border.width = atoi(arg); break;
     case 'c': settings->border.colour = arg; break;
+    case 'v':
+        fprintf(stderr, "sunclock version %s\n", SUNCLOCK_VERSION);
+        exit(0);
+        break;
     case ARGP_KEY_ARG: break;
     default: return ARGP_ERR_UNKNOWN;
     }
