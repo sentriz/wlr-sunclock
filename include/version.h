@@ -1,6 +1,6 @@
 #ifndef SUNCLOCK_VERSION_H
 #define SUNCLOCK_VERSION_H
 
-#define SUNCLOCK_VERSION "v0.1.0"
+#define SUNCLOCK_VERSION "v0.1.1"
 
 #endif
