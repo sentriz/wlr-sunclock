@@ -6,16 +6,21 @@
 wayland desktop widget to show to the sun's shadows on earth.  
 uses [gtk-layer-shell](https://github.com/wmww/gtk-layer-shell) and the [layer shell protocol](https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-layer-shell-unstable-v1.xml) to render on your desktop, behind your windows
 
-## install from source
+## Installation
+### from source
 
     pacman -S gtk-layer-shell gtk3 wayland
 
     meson build
     sudo ninja -C build install
 
-## install from AUR
+### from AUR
 
 please see [wlr-sunclock-git](https://aur.archlinux.org/packages/wlr-sunclock-git/)
+
+### from OBS
+
+please see [X11:Wayland/wlr-sunclock](https://build.opensuse.org/package/show/X11:Wayland/wlr-sunclock) for the openSUSE package
 
 ## cli args
 
