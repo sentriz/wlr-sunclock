@@ -44,10 +44,12 @@ static gboolean sunclock_gui_draw_shade(GtkWidget* widget, cairo_t* cr,
     cairo_paint(cr);
     g_object_unref(image_scaled);
 
-    GtkStyleContext* context = gtk_widget_get_style_context(widget);
-    GtkStateFlags state = gtk_style_context_get_state(context);
     GdkRGBA colour;
-    gtk_style_context_get_color(context, state, &colour);
+    colour.red = 0.933333;
+    colour.green = 0.933333;
+    colour.blue = 0.925490;
+    colour.alpha = 1.0;
+
     gdk_cairo_set_source_rgba(cr, &colour);
 
     // calculate the illuminated area
