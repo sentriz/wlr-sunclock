@@ -1,7 +1,7 @@
 project(
   'wlr-sunclock',
   'c',
-meson_version : '>=0.47.0',
+meson_version : '>=0.46.0',
 default_options : ['warning_level=3', 'werror=true'],
 version : 'v0.1.0'
 )
