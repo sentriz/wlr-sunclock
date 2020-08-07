@@ -1,9 +1,45 @@
-/***************************************************************
- * "Sun clock"                                                 *
- *                                                             *
- * Designed and implemented by John Walker in November of 1988 *
- * Version for the Sun Workstation                             *
- ***************************************************************/
+// Sun clock
+//
+// Designed and implemented by John Walker in November of 1988.
+// Version for the Sun Workstation.
+//
+// The algorithm used to calculate the position of the Sun is given in
+// Chapter 18 of:
+//
+//     "Astronomical  Formulae for Calculators" by Jean Meeus, Third Edition,
+//     Richmond: Willmann-Bell, 1985.
+//
+// This book can be obtained from:
+//
+//     Willmann-Bell
+//     P.O. Box 35025
+//     Richmond, VA  23235
+//     USA
+//     Phone: (804) 320-7016
+//
+// This program was written by:
+//
+//    John Walker
+//    Autodesk, Inc.
+//    2320 Marinship Way
+//    Sausalito, CA  94965
+//    USA
+//    Fax:   (415) 389-9418
+//    Voice: (415) 332-2344 Ext. 2829
+//    Usenet: {sun,well,uunet}!acad!kelvin
+//    or: kelvin@acad.uu.net
+//
+// Modified for interactive maps by:
+//
+//     Stephen Martin
+//     Fujitsu Systems Business of Canada
+//     smartin@fujitsu.ca
+//
+// This  program is in the public domain: "Do what thou wilt shall be the
+// whole of the law". I'd appreciate receiving any bug  fixes  and/or
+// enhancements, which  I'll  incorporate  in  future  versions  of  the
+// program. Please leave the original attribution information intact so that
+// credit and blame may be properly apportioned.
 
 #include <math.h>
 #include <stdio.h>
