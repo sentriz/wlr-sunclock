@@ -22,7 +22,7 @@ please see [wlr-sunclock-git](https://aur.archlinux.org/packages/wlr-sunclock-gi
 
 please see [X11:Wayland/wlr-sunclock](https://build.opensuse.org/package/show/X11:Wayland/wlr-sunclock) for the openSUSE package
 
-## cli args
+## CLI args
 
     -a, --anchors=ANCHORS      window anchors (see below)
     -l, --layer=<background|bottom|top|overlay>
@@ -36,7 +36,7 @@ please see [X11:Wayland/wlr-sunclock](https://build.opensuse.org/package/show/X1
     -?, --help                 Give this help list
         --usage                Give a short usage message
 
-## anchors
+## Anchors
 
     -a tl   -a tr   -a br   -a bl   -a ''   -a tblr
     ┌─┬───┐ ┌───┬─┐ ┌─────┐ ┌─────┐ ┌─────┐ ╔═════╗
@@ -44,7 +44,7 @@ please see [X11:Wayland/wlr-sunclock](https://build.opensuse.org/package/show/X1
     │     │ │     │ │   ┌─┤ ├─┐   │ │ └─┘ │ ║     ║
     └─────┘ └─────┘ └───┴─┘ └─┴───┘ └─────┘ ╚═════╝
 
-## start on boot with sway example
+## Start on boot with sway example
 
     # ~/.config/sway/config
 
