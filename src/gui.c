@@ -6,8 +6,9 @@
 
 static void sunclock_gui_fill_wtab(short* wtab, int width, int height,
                                    int* gmt_position) {
-    time_t t = time(NULL);
-    struct tm* gm_time = gmtime(&t);
+    time_t raw_time;
+    time(&raw_time);
+    struct tm* gm_time = gmtime(&raw_time);
 
     double jt, sunra, sundec, sunrv, sunlong;
     jt = astro_gm_time_to_julian_astro(gm_time);
