@@ -41,7 +41,7 @@ new_version="v${version[0]}.${version[1]}.${version[2]}"
 meson rewrite kwargs set project / version "$new_version"
 
 # write version header
-cat > include/version.h  << EOL
+cat > include/version.h  <<EOL
 #ifndef SUNCLOCK_VERSION_H
 #define SUNCLOCK_VERSION_H
 
