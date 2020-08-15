@@ -22,6 +22,10 @@ please see [wlr-sunclock-git](https://aur.archlinux.org/packages/wlr-sunclock-gi
 
 please see [X11:Wayland/wlr-sunclock](https://build.opensuse.org/package/show/X11:Wayland/wlr-sunclock) for the openSUSE package
 
+### from Fedora Copr
+
+please see [wef/wlr-sunclock](https://copr.fedorainfracloud.org/coprs/wef/wlr-sunclock/) for a Fedora package
+
 ## CLI args
 
     -a, --anchors=ANCHORS      window anchors (see below)
