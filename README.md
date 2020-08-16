@@ -7,6 +7,9 @@ wayland desktop widget to show to the sun's shadows on earth.
 uses [gtk-layer-shell](https://github.com/wmww/gtk-layer-shell) and the [layer shell protocol](https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-layer-shell-unstable-v1.xml) to render on your desktop, behind your windows
 
 ## Installation
+
+[![](https://repology.org/badge/vertical-allrepos/wlr-sunclock.svg)](https://repology.org/project/wlr-sunclock/versions)
+
 ### from source
 
     pacman -S gtk-layer-shell gtk3 wayland
