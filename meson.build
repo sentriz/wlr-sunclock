@@ -29,5 +29,5 @@ executable(
         gtk_layer_shell,
     ],
     install: true,
-    link_args: ['-X', '-lm'],
+    link_args: ['-lm'],
 )
