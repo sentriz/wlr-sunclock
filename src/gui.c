@@ -2,7 +2,9 @@
 #include "config.h"
 #include "gtk-layer-shell.h"
 #include "map.h"
+#include <glib.h>
 #include <gtk/gtk.h>
+#include <librsvg-2.0/librsvg/rsvg.h>
 
 static void sunclock_gui_fill_wtab(short* wtab, int width, int height,
                                    int* gmt_position) {
@@ -87,7 +89,7 @@ void sunclock_gui_activate(GtkApplication* app, gpointer psettings) {
 
     // user setting border, layer
     gtk_container_set_border_width(GTK_CONTAINER(gtk_window),
-                                   settings->border.width);
+                                   settings->border_width);
     gtk_layer_set_layer(gtk_window, (int)settings->layer);
 
     // user setting margin
@@ -115,9 +117,14 @@ void sunclock_gui_activate(GtkApplication* app, gpointer psettings) {
 
     int image_width = settings->width;
     int image_height = settings->width / 2;
-    GdkPixbuf* map_image =
-        gdk_pixbuf_new_from_inline(-1, sunclock_map, FALSE, NULL);
     gtk_widget_set_size_request(canvas, image_width, image_height);
+
+    const gchar* map_svg =
+        sunclock_map_svg(settings->colour_ocean, settings->colour_land);
+    glong map_len = g_utf8_strlen(map_svg, -1);
+    RsvgHandle* map_handle =
+        rsvg_handle_new_from_data((guint8*)map_svg, map_len, NULL);
+    GdkPixbuf* map_image = rsvg_handle_get_pixbuf(map_handle);
 
     // draw canvas now and every 30s
     g_signal_connect(canvas, "draw", G_CALLBACK(sunclock_gui_draw_shade),

@@ -6,13 +6,16 @@
 wayland desktop widget to show to the sun's shadows on earth.  
 uses [gtk-layer-shell](https://github.com/wmww/gtk-layer-shell) and the [layer shell protocol](https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-layer-shell-unstable-v1.xml) to render on your desktop, behind your windows
 
+now with colour support 😎
+![](.github/tile.png)
+
 ## Installation
 
 [![](https://repology.org/badge/vertical-allrepos/wlr-sunclock.svg)](https://repology.org/project/wlr-sunclock/versions)
 
 ### from source
 
-    pacman -S gtk-layer-shell gtk3 wayland
+    pacman -S gtk-layer-shell gtk3 wayland librsvg
 
     meson build
     sudo ninja -C build install
@@ -31,17 +34,15 @@ please see [wef/wlr-sunclock](https://copr.fedorainfracloud.org/coprs/wef/wlr-su
 
 ## CLI args
 
-    -a, --anchors=ANCHORS      window anchors (see below)
-    -l, --layer=<background|bottom|top|overlay>
-                               desktop layer to show the widget on
-    -m, --margins=MARGINS      window margins
-    -w, --width=WIDTH          window width
-    -c, --border-colour=BORDER_COLOUR
-                               window border colour (unused)
-    -d, --border-width=BORDER_WIDTH
-                               window border width
-    -?, --help                 Give this help list
-        --usage                Give a short usage message
+    -a, --anchors=ANCHORS                       string of window anchors (see below)
+    -i, --monitor-index=MONITOR_INDEX           monitor to show window on (starts at 0)
+    -l, --layer=<background|bottom|top|overlay> desktop layer to show the widget on
+    -m, --margins=MARGINS                       comma separated margins for window
+    -w, --width=WIDTH                           width of the window
+    -d, --border-width=BORDER_WIDTH             width of the window's border
+    -o, --colour-ocean=COLOUR_OCEAN             colour of the ocean
+    -n, --colour-land=COLOUR_LAND               colour of the land
+    -v, --version                               print version
 
 ## Anchors
 
@@ -60,4 +61,6 @@ please see [wef/wlr-sunclock](https://copr.fedorainfracloud.org/coprs/wef/wlr-su
        --width 800 \
        --layer bottom \
        --anchors br \
-       --border-width 2
+       --border-width 2 \
+       --colour-ocean "#93c5fd" \
+       --colour-land "#7c3aed"

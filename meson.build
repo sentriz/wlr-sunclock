@@ -9,6 +9,7 @@ version : 'v0.1.1'
 cc = meson.get_compiler('c')
 gtk = dependency('gtk+-wayland-3.0', version: '>=3.22.0')
 gtk_layer_shell = dependency('gtk-layer-shell-0')
+librsvg = dependency('librsvg-2.0')
 
 add_project_arguments(cc.get_supported_arguments([
     '-Wno-deprecated-declarations',
@@ -21,12 +22,14 @@ executable(
         'src/main.c',
         'src/gui.c',
         'src/astro.c',
+        'src/map.c',
     ),
     include_directories: ['include'],
     dependencies: [
         cc.find_library('m'),
         gtk,
         gtk_layer_shell,
+        librsvg,
     ],
     install: true,
     link_args: ['-lm'],

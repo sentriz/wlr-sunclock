@@ -20,14 +20,15 @@ static enum sunclock_layer layer_from_str(char* in) {
 // clang-format off
 static char doc[] = "Displays a sunclock desktop widget using the layer shell protocol";
 static struct argp_option options[] = {
-    {"layer",         'l', "<background|bottom|top|overlay>", 0, "desktop layer to show the widget on",               1},
-    {"width",         'w', "WIDTH",                           0, "width of the window",                               1},
-    {"anchors",       'a', "ANCHORS",                         0, "string of window anchors (see readme)",             1},
-    {"margins",       'm', "MARGINS",                         0, "comma seperated margins for window",                1},
-    {"monitor-index", 'i', "MONITOR_INDEX",                   0, "monitor to show window on (starts at 0)",           1},
-    {"border-width",  'd', "BORDER_WIDTH",                    0, "width of the window's border",                      2},
-    {"border-colour", 'c', "BORDER_COLOUR",                   0, "colour of the window's border (to be implemented)", 2},
-    {"version",       'v', NULL,                              0, "print version",                                     3},
+    {"layer",         'l', "<background|bottom|top|overlay>", 0, "desktop layer to show the widget on",     1},
+    {"width",         'w', "WIDTH",                           0, "width of the window",                     1},
+    {"anchors",       'a', "ANCHORS",                         0, "string of window anchors (see readme)",   1},
+    {"margins",       'm', "MARGINS",                         0, "comma separated margins for window",      1},
+    {"monitor-index", 'i', "MONITOR_INDEX",                   0, "monitor to show window on (starts at 0)", 1},
+    {"border-width",  'd', "BORDER_WIDTH",                    0, "width of the window's border",            2},
+    {"colour-ocean",  'o', "COLOUR_OCEAN",                    0, "colour of the ocean",                     3},
+    {"colour-land",   'n', "COLOUR_LAND",                     0, "colour of the land",                      3},
+    {"version",       'v', NULL,                              0, "print version",                           4},
     {0},
 };
 // clang-format on
@@ -49,8 +50,9 @@ static error_t parse_option(int key, char* arg, struct argp_state* state) {
             settings->margins[i] = atoi(strsep(&arg, ","));
         break;
     case 'i': settings->monitor_index = atoi(arg); break;
-    case 'd': settings->border.width = atoi(arg); break;
-    case 'c': settings->border.colour = arg; break;
+    case 'd': settings->border_width = atoi(arg); break;
+    case 'o': settings->colour_ocean = arg; break;
+    case 'n': settings->colour_land = arg; break;
     case 'v':
         fprintf(stderr, "sunclock version %s\n", SUNCLOCK_VERSION);
         exit(0);
@@ -69,6 +71,8 @@ int main(int argc, char* argv[]) {
         .width = 300,
         .anchors = "",
         .monitor_index = 0,
+        .colour_ocean = "#4c446d",
+        .colour_land = "#726f9e",
     };
     argp_parse(&argp, argc, argv, 0, 0, &settings);
     return sunclock_gui_start(&settings);

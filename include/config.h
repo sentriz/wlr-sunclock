@@ -10,15 +10,16 @@ enum sunclock_layer {
 
 struct sunclock_gui_settings {
     int margins[4];
-    struct {
-        int width;
-        char* colour;
-    } border;
-    enum sunclock_layer layer;
-    int width;
-    char* anchors;
+    int border_width;
+
     char* title;
+    enum sunclock_layer layer;
+    char* anchors;
     int monitor_index;
+    int width;
+
+    char* colour_ocean;
+    char* colour_land;
 };
 
 #endif
