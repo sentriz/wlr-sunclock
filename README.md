@@ -62,5 +62,5 @@ please see [wef/wlr-sunclock](https://copr.fedorainfracloud.org/coprs/wef/wlr-su
        --layer bottom \
        --anchors br \
        --border-width 2 \
-       --colour-ocean "#93c5fd" \
-       --colour-land "#7c3aed"
+       --colour-ocean "#C4B5FD" \
+       --colour-land "#6D28D9"
