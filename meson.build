@@ -1,14 +1,14 @@
 project(
   'wlr-sunclock',
   'c',
-meson_version : '>=0.46.0',
-default_options : ['warning_level=3', 'werror=true'],
-version : 'v1.0.0'
+  meson_version : '>=0.46.0',
+  default_options : ['warning_level=3', 'werror=true'],
+  version : 'v1.0.0'
 )
 
 cc = meson.get_compiler('c')
-gtk = dependency('gtk+-wayland-3.0', version: '>=3.22.0')
-gtk_layer_shell = dependency('gtk-layer-shell-0')
+gtk = dependency('gtk4', version: '>=4.0.0')
+gtk_layer_shell = dependency('gtk4-layer-shell-0')
 librsvg = dependency('librsvg-2.0')
 
 add_project_arguments(cc.get_supported_arguments([
@@ -20,11 +20,8 @@ executable(
     meson.project_name(),
     files(
         'src/main.c',
-        'src/gui.c',
         'src/astro.c',
-        'src/map.c',
     ),
-    include_directories: ['include'],
     dependencies: [
         cc.find_library('m'),
         gtk,

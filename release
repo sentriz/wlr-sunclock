@@ -42,10 +42,10 @@ meson rewrite kwargs set project / version "$new_version"
 
 # write version header
 cat > include/version.h  <<EOL
-#ifndef SUNCLOCK_VERSION_H
-#define SUNCLOCK_VERSION_H
+#ifndef VERSION_H
+#define VERSION_H
 
-#define SUNCLOCK_VERSION "$new_version"
+#define VERSION "$new_version"
 
 #endif
 EOL
