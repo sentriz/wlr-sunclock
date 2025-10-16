@@ -21,6 +21,7 @@ executable(
     files(
         'src/main.c',
         'src/astro.c',
+        'src/map.c',
     ),
     dependencies: [
         cc.find_library('m'),

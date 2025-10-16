@@ -42,8 +42,8 @@
 // credit and blame may be properly apportioned.
 
 #include <math.h>
-#include <stdio.h>
 #include <stdlib.h>
+#include "astro.h"
 #include <time.h>
 
 #define PI 3.14159265358979323846
@@ -148,88 +148,33 @@ void astro_sun_position(double jd, int apparent, double* ra, double* dec,
     *dec = rtd(asin(sin(dtr(eps)) * sin(dtr(theta))));
 }
 
-/* greenwich Mean Siderial Time for a given instant expressed as a Julian date
- * and fraction */
-double astro_gm_siderial_time(double jd) {
-    /* time, in Julian centuries of 36525 ephemeris days, measured from the
-     * epoch 1900 January 0.5 ET */
-    double t = ((floor(jd + 0.5) - 0.5) - 2415020.0) / 36525.0;
-    double theta0 = 6.6460656 + 2400.051262 * t + 0.00002581 * t * t;
 
-    t = (jd + 0.5) - (floor(jd + 0.5));
-    theta0 += (t * 24.0) * 1.002737908;
-    theta0 = (theta0 - 24.0 * (floor(theta0 / 24.0)));
-    return theta0;
-}
-
-/* project illuminated area on the map */
-void astro_project_illum(short* wtab, int xdots, int ydots, double dec) {
-    int i, ftf = 1, ilon, ilat, lilon = 0, lilat = 0, xt;
-    double m, x, y, z, th, lon, lat;
-
-    /* clear unoccupied cells in width table */
-    for (i = 0; i < ydots; i++)
-        wtab[i] = -1;
+/* return terminator curve points directly as lon/lat coordinates
+ * returns the number of points generated */
+int astro_terminator_points(AstroPoint* points, int max_points, double dec) {
+    int count = 0;
+    double x, y, z, th, lon, lat;
 
     /* build transformation for declination */
     double s = sin(-dtr(dec));
     double c = cos(-dtr(dec));
 
     /* increment over a semicircle of illumination */
-    for (th = -(PI / 2); th <= PI / 2 + 0.001; th += PI / TERMINC) {
+    for (th = -(PI / 2); th <= PI / 2 + 0.001 && count < max_points;
+         th += PI / TERMINC) {
         /* transform the point through the declination rotation */
         x = -s * sin(th);
         y = cos(th);
         z = c * sin(th);
 
-        /* transform the resulting co-ordinate through the map projection to
-         * obtain screen co-ordinates */
+        /* transform the resulting co-ordinate through the map projection */
         lon = (y == 0 && x == 0) ? 0.0 : rtd(atan2(y, x));
         lat = rtd(asin(z));
 
-        ilat = ydots - (lat + 90) * (ydots / 180.0);
-        ilon = lon * (xdots / 360.0);
-
-        if (ftf) {
-            /* first time. just save start co-ordinate */
-            lilon = ilon;
-            lilat = ilat;
-            ftf = 0;
-            continue;
-        }
-
-        /* trace out the line and set the width table */
-        if (lilat == ilat) {
-            wtab[(ydots - 1) - ilat] = ilon == 0 ? 1 : ilon;
-        } else {
-            m = ((double)(ilon - lilon)) / (ilat - lilat);
-            for (i = lilat; i != ilat; i += sgn(ilat - lilat)) {
-                xt = lilon + floor((m * (i - lilat)) + 0.5);
-                wtab[(ydots - 1) - i] = xt == 0 ? 1 : xt;
-            }
-        }
-        lilon = ilon;
-        lilat = ilat;
+        points[count].lon = lon;
+        points[count].lat = lat;
+        count++;
     }
 
-    /* tweak the widths to generate full illumination for the correct pole */
-    if (dec < 0.0) {
-        ilat = ydots - 1;
-        lilat = -1;
-    } else {
-        ilat = 0;
-        lilat = 1;
-    }
-
-    for (i = ilat; i != ydots / 2; i += lilat) {
-        if (wtab[i] != -1) {
-            while (1) {
-                wtab[i] = xdots / 2;
-                if (i == ilat)
-                    break;
-                i -= lilat;
-            }
-            break;
-        }
-    }
+    return count;
 }
