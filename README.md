@@ -20,7 +20,7 @@ uses [gtk-layer-shell](https://github.com/wmww/gtk-layer-shell) and the [layer s
 
 ### From source
 
-    pacman -S gtk-layer-shell gtk3 wayland librsvg
+    pacman -S gtk4-layer-shell gtk4 wayland librsvg
 
     meson build
     sudo ninja -C build install
