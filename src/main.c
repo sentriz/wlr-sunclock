@@ -20,6 +20,8 @@ static struct settings {
 
     char* colour_ocean;
     char* colour_land;
+    char* colour_sun;
+    gboolean show_sun;
 } g_settings = {
     .title = "xyz.senan.wlr-sunclock",
     .layer = GTK_LAYER_SHELL_LAYER_BOTTOM,
@@ -28,6 +30,8 @@ static struct settings {
     .monitor_index = 0,
     .colour_ocean = "#4c446d",
     .colour_land = "#726f9e",
+    .colour_sun = "#ffe135",
+    .show_sun = FALSE,
 };
 
 static gboolean draw_shade_timeout(GtkWidget* widget) {
@@ -39,8 +43,8 @@ typedef struct {
     double x, y;
 } Point;
 
-static Point terminator_point(AstroPoint astro_point, int width, int height,
-                              int middle, gboolean reverse) {
+static Point astro_to_point(AstroPoint astro_point, int width, int height,
+                            int middle, gboolean reverse) {
     double screen_x = (astro_point.lon + 180.0) * width / 360.0;
     double screen_y = (90.0 - astro_point.lat) * height / 180.0;
 
@@ -72,6 +76,42 @@ int compare_point_x(const void* a, const void* b) {
         return 1;
     else
         return 0;
+}
+
+static void draw_sun(cairo_t* cr, double x, double y, double radius,
+                     const char* color_hex) {
+    unsigned int r, g, b;
+    if (sscanf(color_hex, "#%02x%02x%02x", &r, &g, &b) != 3)
+        return;
+
+    // Convert to 0-1 range
+    double red = r / 255.0;
+    double green = g / 255.0;
+    double blue = b / 255.0;
+
+    // circle
+    cairo_new_path(cr);
+    cairo_arc(cr, x, y, radius, 0, 2 * G_PI);
+    cairo_set_source_rgba(cr, red, green, blue, 1.0);
+    cairo_fill(cr);
+
+    // rays - slightly darker
+    cairo_set_line_width(cr, 2.0);
+    cairo_set_source_rgba(cr, red * 0.9, green * 0.9, blue * 0.9, 1.0);
+
+    int num_rays = 8;
+    double ray_length = radius * 2;
+    for (int i = 0; i < num_rays; i++) {
+        double angle = (i * 2 * G_PI) / num_rays;
+        double inner_x = x + cos(angle) * (radius + 2);
+        double inner_y = y + sin(angle) * (radius + 2);
+        double outer_x = x + cos(angle) * ray_length;
+        double outer_y = y + sin(angle) * ray_length;
+
+        cairo_move_to(cr, inner_x, inner_y);
+        cairo_line_to(cr, outer_x, outer_y);
+        cairo_stroke(cr);
+    }
 }
 
 static void draw_shade(GtkDrawingArea* area, cairo_t* cr, int width, int height,
@@ -110,10 +150,9 @@ static void draw_shade(GtkDrawingArea* area, cairo_t* cr, int width, int height,
     Point points[num_points];
 
     for (int i = 0; i < num_coords; i++) {
-        points[2 * i] =
-            terminator_point(coords[i], width, height, middle, FALSE);
+        points[2 * i] = astro_to_point(coords[i], width, height, middle, FALSE);
         points[2 * i + 1] =
-            terminator_point(coords[i], width, height, middle, TRUE);
+            astro_to_point(coords[i], width, height, middle, TRUE);
     }
     qsort(points, num_points, sizeof(Point), compare_point_x);
 
@@ -143,6 +182,13 @@ static void draw_shade(GtkDrawingArea* area, cairo_t* cr, int width, int height,
                : cairo_line_to(cr, width, height); // southern summer
 
     cairo_fill(cr);
+
+    if (g_settings.show_sun) {
+        AstroPoint subsolar = {.lat = sundec, .lon = 180.0};
+        Point p = astro_to_point(subsolar, width, height, middle, FALSE);
+
+        draw_sun(cr, p.x, p.y, 10, g_settings.colour_sun);
+    }
 }
 
 void activate(GtkApplication* app, gpointer user_data) {
@@ -228,8 +274,11 @@ static struct argp_option options[] = {
 
     {"colour-ocean",  'o', "COLOUR",        0, "colour of the ocean",                                           2},
     {"colour-land",   'n', "COLOUR",        0, "colour of the land",                                            2},
+    {"colour-sun",    's', "COLOUR",        0, "colour of the sun (requires --show-sun)",                       2},
 
-    {"version",       'v', NULL,            0, "print version",                                                 3},
+    {"show-sun",      'S', NULL,            0, "show sun at subsolar point",                                    3},
+
+    {"version",       'v', NULL,            0, "print version",                                                 4},
     {0},
 };
 // clang-format on
@@ -253,6 +302,8 @@ static error_t parse_option(int key, char* arg, struct argp_state* state) {
     case 'i': settings->monitor_index = atoi(arg); break;
     case 'o': settings->colour_ocean = arg; break;
     case 'n': settings->colour_land = arg; break;
+    case 's': settings->colour_sun = arg; break;
+    case 'S': settings->show_sun = TRUE; break;
     case 'v':
         fprintf(stderr, "sunclock version %s\n", VERSION);
         exit(0);
