@@ -109,10 +109,11 @@ static void draw_shade(GtkDrawingArea* area, cairo_t* cr, int width, int height,
     size_t num_points = num_coords * 2;
     Point points[num_points];
 
-    int p = 0;
     for (int i = 0; i < num_coords; i++) {
-        points[p++] = terminator_point(coords[i], width, height, middle, FALSE);
-        points[p++] = terminator_point(coords[i], width, height, middle, TRUE);
+        points[2 * i] =
+            terminator_point(coords[i], width, height, middle, FALSE);
+        points[2 * i + 1] =
+            terminator_point(coords[i], width, height, middle, TRUE);
     }
     qsort(points, num_points, sizeof(Point), compare_point_x);
 
