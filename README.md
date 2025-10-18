@@ -1,4 +1,5 @@
 ![](.github/gif.gif)
+
 (demo gif, in reality it updates in real time)
 
 # wlr-sunclock
@@ -6,29 +7,33 @@
 wayland desktop widget to show to the sun's shadows on earth.  
 uses [gtk-layer-shell](https://github.com/wmww/gtk-layer-shell) and the [layer shell protocol](https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-layer-shell-unstable-v1.xml) to render on your desktop, behind your windows
 
-now with colour support 😎
-![](.github/tile.png)
+| Spring Equinox | Summer Solstice |
+|:--|:--|
+| ![](.github/spring_equinox.png) |  ![](.github/summer_solstice.png)  |
+| **Autumn Equinox** | **Winter Solstice** | 
+| ![](.github/autumn_equinox.png) |  ![](.github/winter_solstice.png)  |
+
 
 ## Installation
 
 [![](https://repology.org/badge/vertical-allrepos/wlr-sunclock.svg)](https://repology.org/project/wlr-sunclock/versions)
 
-### from source
+### From source
 
     pacman -S gtk-layer-shell gtk3 wayland librsvg
 
     meson build
     sudo ninja -C build install
 
-### from AUR
+### From AUR
 
 please see [wlr-sunclock-git](https://aur.archlinux.org/packages/wlr-sunclock-git/)
 
-### from OBS
+### From OBS
 
 please see [X11:Wayland/wlr-sunclock](https://build.opensuse.org/package/show/X11:Wayland/wlr-sunclock) for the openSUSE package
 
-### from Fedora Copr
+### From Fedora Copr
 
 please see [wef/wlr-sunclock](https://copr.fedorainfracloud.org/coprs/wef/wlr-sunclock/) for a Fedora package
 
