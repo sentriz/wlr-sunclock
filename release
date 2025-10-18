@@ -41,7 +41,7 @@ new_version="v${version[0]}.${version[1]}.${version[2]}"
 meson rewrite kwargs set project / version "$new_version"
 
 # write version header
-cat > include/version.h  <<EOL
+cat > src/version.h  <<EOL
 #ifndef VERSION_H
 #define VERSION_H
 
