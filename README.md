@@ -39,15 +39,18 @@ please see [wef/wlr-sunclock](https://copr.fedorainfracloud.org/coprs/wef/wlr-su
 
 ## CLI args
 
-    -a, --anchors=ANCHORS                       string of window anchors (see below)
-    -i, --monitor-index=MONITOR_INDEX           monitor to show window on (starts at 0)
-    -l, --layer=<background|bottom|top|overlay> desktop layer to show the widget on
-    -m, --margins=MARGINS                       comma separated margins for window
-    -w, --width=WIDTH                           width of the window
-    -d, --border-width=BORDER_WIDTH             width of the window's border
-    -o, --colour-ocean=COLOUR_OCEAN             colour of the ocean
-    -n, --colour-land=COLOUR_LAND               colour of the land
-    -v, --version                               print version
+```
+  -i, --monitor-index=INDEX  monitor to show window on (starts at 0)
+  -l, --layer=LAYER          layer (background, bottom, top, overlay)
+  -a, --anchors=ANCHORS      string of window anchors (see readme)
+  -m, --margins=MARGINS      comma separated margins for window (left, right, top, bottom)
+  -w, --width=SIZE           width of the window in pixels
+  -n, --colour-land=COLOUR   colour of the land
+  -o, --colour-ocean=COLOUR  colour of the ocean
+  -?, --help                 Give this help list
+      --usage                Give a short usage message
+  -v, --version              print version
+```
 
 ## Anchors
 
