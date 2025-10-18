@@ -3,7 +3,7 @@ project(
   'c',
   meson_version : '>=0.46.0',
   default_options : ['warning_level=3', 'werror=true'],
-  version : 'v1.0.0'
+version : 'v1.1.0'
 )
 
 cc = meson.get_compiler('c')
