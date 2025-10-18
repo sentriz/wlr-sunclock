@@ -99,43 +99,43 @@ static void draw_shade(GtkDrawingArea* area, cairo_t* cr, int width, int height,
     int gmt_position = width * sec / 86400;
     int middle = width - gmt_position;
 
-    static int max_points = 200;
-    AstroPoint points[max_points];
-    int num_points = astro_terminator_points(
-        points, sizeof(points) / sizeof(AstroPoint), sundec);
-    if (num_points == 0)
+    static size_t max_coords = 1000;
+    AstroPoint coords[max_coords];
+    int num_coords = astro_terminator_points(
+        coords, sizeof(coords) / sizeof(AstroPoint), sundec);
+    if (num_coords == 0)
         return;
 
-    Point screen_points[num_points * 2];
+    size_t num_points = num_coords * 2;
+    Point points[num_points];
+
     int p = 0;
-    for (int i = 0; i < num_points; i++) {
-        screen_points[p++] =
-            terminator_point(points[i], width, height, middle, FALSE);
-        screen_points[p++] =
-            terminator_point(points[i], width, height, middle, TRUE);
+    for (int i = 0; i < num_coords; i++) {
+        points[p++] = terminator_point(coords[i], width, height, middle, FALSE);
+        points[p++] = terminator_point(coords[i], width, height, middle, TRUE);
     }
-    qsort(screen_points, sizeof(screen_points) / sizeof(Point), sizeof(Point),
-          compare_point_x);
+    qsort(points, num_points, sizeof(Point), compare_point_x);
+
+    Point p0 = points[0];
+    Point pN = points[num_points - 1];
 
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_BEST);
 
     cairo_new_path(cr);
     cairo_set_source_rgba(cr, 0.933333, 0.933333, 0.925490, 0.4);
 
-    double fy = screen_points[0].y;
-
     // fill pole
     sundec > 0 ? cairo_line_to(cr, 0, 0)       // northern summer
                : cairo_line_to(cr, 0, height); // southern summer
 
-    cairo_line_to(cr, 0, fy);
+    cairo_line_to(cr, 0, p0.y);
 
-    for (size_t i = 0; i < sizeof(screen_points) / sizeof(Point); i++) {
-        Point p = screen_points[i];
+    for (size_t i = 0; i < num_points; i++) {
+        Point p = points[i];
         cairo_line_to(cr, p.x, p.y);
     }
 
-    cairo_line_to(cr, width, fy);
+    cairo_line_to(cr, width, pN.y);
 
     // fill pole
     sundec > 0 ? cairo_line_to(cr, width, 0)       // northern summer
@@ -197,7 +197,7 @@ void activate(GtkApplication* app, gpointer user_data) {
     // pass the SVG handle directly (no pixbuf conversion)
     gtk_drawing_area_set_draw_func(GTK_DRAWING_AREA(canvas), draw_shade,
                                    map_handle, NULL);
-    g_timeout_add_seconds(1, G_SOURCE_FUNC(draw_shade_timeout), canvas);
+    g_timeout_add_seconds(30, G_SOURCE_FUNC(draw_shade_timeout), canvas);
 
     gtk_window_set_child(gtk_window, canvas);
     gtk_window_present(gtk_window);

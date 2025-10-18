@@ -56,7 +56,7 @@
 #define rtd(x) ((x) / (PI / 180.0))                    /* radian -> degree */
 #define fixangle(a) ((a)-360.0 * (floor((a) / 360.0))) /* fix angle */
 
-#define TERMINC 100       /* circle segments for terminator */
+#define TERMINC 500       /* circle segments for terminator */
 #define PROJINT (60 * 10) /* frequency of seasonal recalculation */
 
 /* convert internal GMT date and time to Julian day and fraction */
