@@ -20,6 +20,7 @@ static struct settings {
 
     char* colour_ocean;
     char* colour_land;
+    char* colour_light;
     char* colour_sun;
     gboolean show_sun;
 } g_settings = {
@@ -30,6 +31,7 @@ static struct settings {
     .monitor_index = 0,
     .colour_ocean = "#4c446d",
     .colour_land = "#726f9e",
+    .colour_light = "#eeeeec66",
     .colour_sun = "#ffe135",
     .show_sun = FALSE,
 };
@@ -42,6 +44,19 @@ static gboolean draw_shade_timeout(GtkWidget* widget) {
 typedef struct {
     double x, y;
 } Point;
+
+// parse hex color to RGBA values (0-1 range)
+static void parse_hex_color(const char* hex, double* r, double* g, double* b,
+                            double* a) {
+    unsigned int ri, gi, bi, ai = 255;
+    if (sscanf(hex, "#%02x%02x%02x%02x", &ri, &gi, &bi, &ai) < 3) {
+        sscanf(hex, "#%02x%02x%02x", &ri, &gi, &bi);
+    }
+    *r = ri / 255.0;
+    *g = gi / 255.0;
+    *b = bi / 255.0;
+    *a = ai / 255.0;
+}
 
 static Point astro_to_point(AstroPoint astro_point, int width, int height,
                             int middle, gboolean reverse) {
@@ -80,24 +95,18 @@ int compare_point_x(const void* a, const void* b) {
 
 static void draw_sun(cairo_t* cr, double x, double y, double radius,
                      const char* color_hex) {
-    unsigned int r, g, b;
-    if (sscanf(color_hex, "#%02x%02x%02x", &r, &g, &b) != 3)
-        return;
-
-    // Convert to 0-1 range
-    double red = r / 255.0;
-    double green = g / 255.0;
-    double blue = b / 255.0;
+    double r, g, b, a;
+    parse_hex_color(color_hex, &r, &g, &b, &a);
 
     // circle
     cairo_new_path(cr);
     cairo_arc(cr, x, y, radius, 0, 2 * G_PI);
-    cairo_set_source_rgba(cr, red, green, blue, 1.0);
+    cairo_set_source_rgba(cr, r, g, b, a);
     cairo_fill(cr);
 
     // rays - slightly darker
     cairo_set_line_width(cr, 2.0);
-    cairo_set_source_rgba(cr, red * 0.9, green * 0.9, blue * 0.9, 1.0);
+    cairo_set_source_rgba(cr, r * 0.9, g * 0.9, b * 0.9, a);
 
     int num_rays = 8;
     double ray_length = radius * 2;
@@ -161,8 +170,11 @@ static void draw_shade(GtkDrawingArea* area, cairo_t* cr, int width, int height,
 
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_BEST);
 
+    double r, g, b, a;
+    parse_hex_color(g_settings.colour_light, &r, &g, &b, &a);
+
     cairo_new_path(cr);
-    cairo_set_source_rgba(cr, 0.933333, 0.933333, 0.925490, 0.4);
+    cairo_set_source_rgba(cr, r, g, b, a);
 
     // fill pole
     sundec > 0 ? cairo_line_to(cr, 0, 0)       // northern summer
@@ -282,9 +294,10 @@ static struct argp_option options[] = {
 
     {"colour-ocean",  'o', "COLOUR",        0, "colour of the ocean",                                           2},
     {"colour-land",   'n', "COLOUR",        0, "colour of the land",                                            2},
-    {"colour-sun",    's', "COLOUR",        0, "colour of the sun (requires --show-sun)",                       2},
+    {"colour-light",  'g', "COLOUR",        0, "colour of the light",                                           2},
+    {"colour-sun",    'u', "COLOUR",        0, "colour of the sun (for --show-sun)",                            2},
 
-    {"show-sun",      'S', NULL,            0, "show sun at subsolar point",                                    3},
+    {"show-sun",      's', NULL,            0, "show sun at subsolar point",                                    3},
 
     {"version",       'v', NULL,            0, "print version",                                                 4},
     {0},
@@ -301,17 +314,18 @@ static error_t parse_option(int key, char* arg, struct argp_state* state) {
             argp_usage(state);
         };
         break;
+    case 'i': settings->monitor_index = atoi(arg); break;
     case 'w': settings->width = atoi(arg); break;
     case 'a': settings->anchors = arg; break;
     case 'm':
         sscanf(arg, "%d,%d,%d,%d", &settings->margins[0], &settings->margins[1],
                &settings->margins[2], &settings->margins[3]);
         break;
-    case 'i': settings->monitor_index = atoi(arg); break;
     case 'o': settings->colour_ocean = arg; break;
     case 'n': settings->colour_land = arg; break;
-    case 's': settings->colour_sun = arg; break;
-    case 'S': settings->show_sun = TRUE; break;
+    case 'g': settings->colour_light = arg; break;
+    case 'u': settings->colour_sun = arg; break;
+    case 's': settings->show_sun = TRUE; break;
     case 'v':
         fprintf(stderr, "sunclock version %s\n", VERSION);
         exit(0);
@@ -328,8 +342,7 @@ int main(int argc, char* argv[]) {
 
     g_setenv("GDK_DISABLE", "vulkan", TRUE);
 
-    const gchar* map = g_strdup_printf(MAP_SVG, g_settings.colour_ocean,
-                                       g_settings.colour_land);
+    const gchar* map = g_strdup_printf(MAP_SVG, g_settings.colour_land);
     glong map_len = g_utf8_strlen(map, -1);
     RsvgHandle* map_handle =
         rsvg_handle_new_from_data((guint8*)map, map_len, NULL);
