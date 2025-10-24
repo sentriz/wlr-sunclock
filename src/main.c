@@ -195,9 +195,11 @@ void activate(GtkApplication* app, gpointer user_data) {
     RsvgHandle* map_handle = (RsvgHandle*)user_data;
 
     GtkWindow* gtk_window = GTK_WINDOW(gtk_application_window_new(app));
-    gtk_layer_init_for_window(gtk_window);
+    gtk_window_set_default_size(GTK_WINDOW(gtk_window), g_settings.width,
+                                g_settings.width / 2);
 
-    // user setting layer
+    // layer
+    gtk_layer_init_for_window(gtk_window);
     gtk_layer_set_layer(gtk_window, (int)g_settings.layer);
 
     // user setting margin
@@ -232,16 +234,22 @@ void activate(GtkApplication* app, gpointer user_data) {
         }
     }
 
+    // set window background to ocean colour
+    GtkCssProvider* css_provider = gtk_css_provider_new();
+    gchar* css = g_strdup_printf("window { background-color: %s; }",
+                                 g_settings.colour_ocean);
+    gtk_css_provider_load_from_string(css_provider, css);
+    gtk_style_context_add_provider_for_display(
+        gdk_display_get_default(), GTK_STYLE_PROVIDER(css_provider),
+        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    g_free(css);
+    g_object_unref(css_provider);
+
+    // canvas expands to fill window
     GtkWidget* canvas = gtk_drawing_area_new();
     gtk_widget_set_hexpand(canvas, TRUE);
     gtk_widget_set_vexpand(canvas, TRUE);
 
-    int image_height = g_settings.width / 2;
-    int image_width = g_settings.width;
-    gtk_widget_set_size_request(canvas, image_width, image_height);
-
-    // draw canvas now and every 30s
-    // pass the SVG handle directly (no pixbuf conversion)
     gtk_drawing_area_set_draw_func(GTK_DRAWING_AREA(canvas), draw_shade,
                                    map_handle, NULL);
     g_timeout_add_seconds(30, G_SOURCE_FUNC(draw_shade_timeout), canvas);
