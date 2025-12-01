@@ -10,6 +10,7 @@ cc = meson.get_compiler('c')
 gtk = dependency('gtk4', version: '>=4.0.0')
 gtk_layer_shell = dependency('gtk4-layer-shell-0')
 librsvg = dependency('librsvg-2.0')
+argp = cc.find_library('argp', required: false)
 
 add_project_arguments(cc.get_supported_arguments([
     '-Wno-deprecated-declarations',
@@ -28,6 +29,7 @@ executable(
         gtk,
         gtk_layer_shell,
         librsvg,
+        argp,
     ],
     install: true,
     link_args: ['-lm'],
