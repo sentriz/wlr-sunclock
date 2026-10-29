@@ -17,11 +17,13 @@ static struct settings {
     char* anchors;
     int monitor_index;
     int width;
+    int border_width;
 
     char* colour_ocean;
     char* colour_land;
     char* colour_light;
     char* colour_sun;
+    char* colour_border;
     gboolean show_sun;
 } g_settings = {
     .title = "xyz.senan.wlr-sunclock",
@@ -33,6 +35,7 @@ static struct settings {
     .colour_land = "#726f9e",
     .colour_light = "#eeeeec66",
     .colour_sun = "#ffe135",
+    .colour_border = "#000000",
     .show_sun = FALSE,
 };
 
@@ -207,8 +210,10 @@ void activate(GtkApplication* app, gpointer user_data) {
     RsvgHandle* map_handle = (RsvgHandle*)user_data;
 
     GtkWindow* gtk_window = GTK_WINDOW(gtk_application_window_new(app));
+    int border = g_settings.border_width;
     gtk_window_set_default_size(GTK_WINDOW(gtk_window), g_settings.width,
-                                g_settings.width / 2);
+                                (g_settings.width - 2 * border) / 2 +
+                                    2 * border);
 
     // layer
     gtk_layer_init_for_window(gtk_window);
@@ -248,8 +253,10 @@ void activate(GtkApplication* app, gpointer user_data) {
 
     // set window background to ocean colour
     GtkCssProvider* css_provider = gtk_css_provider_new();
-    gchar* css = g_strdup_printf("window { background-color: %s; }",
-                                 g_settings.colour_ocean);
+    gchar* css = g_strdup_printf(
+        "window { background-color: %s; background-clip: padding-box; "
+        "border: %dpx solid %s; }",
+        g_settings.colour_ocean, border, g_settings.colour_border);
     gtk_css_provider_load_from_string(css_provider, css);
     gtk_style_context_add_provider_for_display(
         gdk_display_get_default(), GTK_STYLE_PROVIDER(css_provider),
@@ -291,11 +298,13 @@ static struct argp_option options[] = {
     {"width",         'w', "SIZE",          0, "width of the window in pixels",                                 1},
     {"anchors",       'a', "ANCHORS",       0, "string of window anchors (see readme)",                         1},
     {"margins",       'm', "MARGINS",       0, "comma separated margins for window (left, right, top, bottom)", 1},
+    {"border-width",  'b', "SIZE",          0, "width of the border in pixels",                                 1},
 
     {"colour-ocean",  'o', "COLOUR",        0, "colour of the ocean",                                           2},
     {"colour-land",   'n', "COLOUR",        0, "colour of the land",                                            2},
     {"colour-light",  'g', "COLOUR",        0, "colour of the light",                                           2},
     {"colour-sun",    'u', "COLOUR",        0, "colour of the sun (for --show-sun)",                            2},
+    {"colour-border", 'c', "COLOUR",        0, "colour of the border",                                          2},
 
     {"show-sun",      's', NULL,            0, "show sun at subsolar point",                                    3},
 
@@ -321,10 +330,12 @@ static error_t parse_option(int key, char* arg, struct argp_state* state) {
         sscanf(arg, "%d,%d,%d,%d", &settings->margins[0], &settings->margins[1],
                &settings->margins[2], &settings->margins[3]);
         break;
+    case 'b': settings->border_width = atoi(arg); break;
     case 'o': settings->colour_ocean = arg; break;
     case 'n': settings->colour_land = arg; break;
     case 'g': settings->colour_light = arg; break;
     case 'u': settings->colour_sun = arg; break;
+    case 'c': settings->colour_border = arg; break;
     case 's': settings->show_sun = TRUE; break;
     case 'v':
         fprintf(stderr, "sunclock version %s\n", VERSION);
