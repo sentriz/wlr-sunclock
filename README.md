@@ -43,10 +43,15 @@ please see [wef/wlr-sunclock](https://copr.fedorainfracloud.org/coprs/wef/wlr-su
   -i, --monitor-index=INDEX  monitor to show window on (starts at 0)
   -l, --layer=LAYER          layer (background, bottom, top, overlay)
   -a, --anchors=ANCHORS      string of window anchors (see readme)
+  -b, --border-width=SIZE    width of the border in pixels
   -m, --margins=MARGINS      comma separated margins for window (left, right, top, bottom)
   -w, --width=SIZE           width of the window in pixels
+  -c, --colour-border=COLOUR colour of the border
+  -g, --colour-light=COLOUR  colour of the light
   -n, --colour-land=COLOUR   colour of the land
   -o, --colour-ocean=COLOUR  colour of the ocean
+  -u, --colour-sun=COLOUR    colour of the sun (for --show-sun)
+  -s, --show-sun             show sun at subsolar point
   -?, --help                 Give this help list
       --usage                Give a short usage message
   -v, --version              print version
